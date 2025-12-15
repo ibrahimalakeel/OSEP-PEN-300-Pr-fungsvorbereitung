@@ -1960,3 +1960,280 @@ if ip a | grep -q "tun0"; then
     echo "[+] VPN is connected"
     ip -4 addr show tun0 | grep inet
 else
+    echo "[-] VPN not connected! Connect now!"
+    exit 1
+fi
+
+# Tools Check
+echo ""
+echo "[*] Checking essential tools..."
+
+tools=("nmap" "gobuster" "evil-winrm" "impacket-GetUserSPNs" "chisel" "bloodhound" "crackmapexec")
+
+for tool in "${tools[@]}"; do
+    if command -v $tool &> /dev/null; then
+        echo "[+] $tool found"
+    else
+        echo "[-] $tool NOT found!"
+    fi
+done
+
+# Wordlists Check
+echo ""
+echo "[*] Checking wordlists..."
+if [ -f "/usr/share/wordlists/rockyou.txt" ]; then
+    echo "[+] rockyou.txt found"
+else
+    echo "[-] rockyou.txt not found!"
+fi
+
+if [ -d "/opt/SecLists" ]; then
+    echo "[+] SecLists found"
+else
+    echo "[-] SecLists not found!"
+fi
+
+# Disk Space
+echo ""
+echo "[*] Checking disk space..."
+df -h / | tail -1
+
+# Create exam directory
+echo ""
+echo "[*] Setting up exam directory..."
+EXAM_DIR=~/osep-exam-$(date +%Y%m%d)
+mkdir -p $EXAM_DIR/{nmap,loot,screenshots,notes}
+echo "[+] Exam directory created: $EXAM_DIR"
+
+# Start services
+echo ""
+echo "[*] Starting services..."
+sudo systemctl start neo4j
+sudo systemctl start postgresql
+echo "[+] Services started"
+
+echo ""
+echo "=== Pre-Flight Check Complete ==="
+echo "Good luck! You got this!"
+```
+
+---
+
+## 10. Practice Resources - Konkret
+
+**12-Wochen Training Plan:**
+
+```plaintext
+WOCHE 1-2: PEN-300 Kursmaterial
+- Vollständig durcharbeiten
+- Alle Lab-Übungen machen
+- Challenge Labs 1x durchgehen
+- Eigene Notizen erstellen
+
+WOCHE 3-4: Challenge Labs + Custom Scripts
+- Challenge Labs nochmal ohne Hints
+- Eigene Payloads schreiben
+- AMSI/AV Bypasses testen
+- Custom C# Tools entwickeln
+
+WOCHE 5-6: HackTheBox Pro Labs
+Pro Lab: Dante
+- 14 Hosts, AD-fokussiert
+- Perfekt für Lateral Movement
+- 30-Tage Access empfohlen
+- Ziel: Unter 2 Wochen abschließen
+
+Pro Lab: RastaLabs  
+- Advanced AD
+- Tiefes Kerberos-Verständnis nötig
+- Certificate Services
+- Sehr OSEP-ähnlich
+
+WOCHE 7-8: TryHackMe Networks
+- Wreath Network (Free)
+- Holo Network (Subscriber)
+- Throwback Network (Subscriber)
+
+Zusätzlich HTB Boxen:
+- Blackfield
+- Cascade
+- Forest
+- Sauna
+- Active
+- Resolute
+
+WOCHE 9-10: CRTE/CRTP (Optional aber gut)
+- Certified Red Team Expert von Altered Security
+- Focuses nur auf AD
+- Günstigere Alternative für mehr AD Practice
+
+WOCHE 11: Mock Exams
+- Nutze PEN-300 Challenge Labs als Mock
+- 48h Zeitlimit setzen
+- Kompletten Report schreiben
+- Weaknesses identifizieren
+
+WOCHE 12: Final Prep
+- Lücken schließen
+- Tools optimieren
+- Cheat Sheets finalisieren
+- Mental vorbereiten
+- Ausruhen vor Prüfung!
+```
+
+**Specific Practice Labs - Mit Links:**
+
+```plaintext
+HackTheBox Pro Labs (https://www.hackthebox.com/hacker/pro-labs):
+1. Dante - €80 für 30 Tage
+   - 14 Machines
+   - AD-focused
+   - Multiple Networks
+   
+2. RastaLabs - €90 für 30 Tage
+   - Advanced AD
+   - Certificate Services
+   - Trust Relationships
+
+3. Offshore - €90 für 30 Tage
+   - Large Network
+   - Complex AD
+
+TryHackMe (https://tryhackme.com):
+1. Wreath Network (Free)
+   - Good for Pivoting practice
+   
+2. Holo Network (Subscriber - £10/month)
+   - AD Environment
+   - Lateral Movement
+   
+3. Throwback Network (Subscriber)
+   - Full AD Pentest
+   - Multiple Domains
+
+PentesterLab (https://pentesterlab.com):
+- Advanced Windows Exploitation Badge
+- $20/month subscription
+- Specific Windows techniques
+
+Standalone HTB Machines (Free/VIP):
+- Forest (Easy - AD Basics)
+- Active (Easy - Kerberoasting)
+- Sauna (Easy - AS-REP Roasting)
+- Resolute (Medium - DnsAdmins)
+- Cascade (Medium - AD Enumeration)
+- Blackfield (Hard - Advanced AD)
+```
+
+**Daily Practice Routine (wenn du Zeit hast):**
+
+```plaintext
+JEDEN TAG (1-2 Stunden):
+
+Wochentags (Nach Arbeit/Schule):
+- 30 Min: Ein spezifisches Thema vertiefen
+  - Monday: AMSI Bypasses
+  - Tuesday: Kerberos Attacks
+  - Wednesday: Lateral Movement
+  - Thursday: Linux PrivEsc
+  - Friday: Web Exploitation
+
+- 30 Min: CTF/Box
+  - HackTheBox Easy/Medium Box
+  - Oder TryHackMe Room
+
+Wochenende (3-4 Stunden pro Tag):
+- Samstag: Pro Lab Progress
+  - 3-4 Stunden fokussiertes Arbeiten
+  - Mehrere Hosts als Ziel
+  
+- Sonntag: Review & Create
+  - Code eigene Tools
+  - Update Cheat Sheets
+  - Review der Woche
+  - Mock Scenarios
+```
+
+**Community Resources:**
+
+```plaintext
+Discord/Forums (Für Hints, KEINE Spoiler):
+- OffSec Discord
+- HackTheBox Discord
+- NetSecFocus Discord
+
+Blogs zu folgen:
+- ired.team (Mantvydas)
+- rastamouse.me
+- pentestlab.blog
+- adsecurity.org
+- harmj0y.net
+
+YouTube Channels:
+- IppSec (HTB Walkthroughs)
+- John Hammond
+- The Cyber Mentor
+- 13Cubed (Windows Forensics/Techniques)
+
+Twitter/X Follow:
+- @harmj0y
+- @_RastaMouse
+- @gentilkiwi
+- @_wald0
+- @tifkin_
+```
+
+---
+
+## Final Checklist - Der Tag davor
+
+```plaintext
+24 STUNDEN VOR PRÜFUNG:
+
+Technical:
+□ Kali VM aktualisiert
+□ Alle Tools funktionieren
+□ VM Snapshot erstellt
+□ VPN-File heruntergeladen und getestet
+□ Backup-Tools auf USB
+□ Report-Template fertig
+□ Screenshot-Tool getestet
+
+Physical Environment:
+□ Ruhiger Raum reserviert
+□ "Nicht stören" Schilder
+□ Stuhl/Tisch ergonomisch
+□ Mehrere Monitore wenn möglich
+□ Backup Internet (Handy Hotspot)
+□ Ladekabel griffbereit
+
+Supplies:
+□ Wasser/Getränke
+□ Snacks vorbereitet
+□ 2-3 Mahlzeiten vorbereitet
+□ Kaffee/Tee
+□ Notfall-Kopfschmerztabletten
+□ Augentropfen
+
+Mental:
+□ Gut geschlafen
+□ Entspannt
+□ Positives Mindset
+□ Vertrauen in deine Fähigkeiten
+□ Notfall-Kontakte notiert
+□ Break-Plan erstellt
+
+"Ich habe hart trainiert. Ich bin bereit. Ich schaffe das!"
+```
+
+---
+
+Du hast jetzt einen **kompletten praktischen Leitfaden**. Alles ist konkret, umsetzbar, mit echten Befehlen und realistischen Szenarien.
+
+**Dein nächster Schritt JETZT:**
+1. Baue das AD-Lab auf (Abschnitt 2)
+2. Installiere alle Tools (Abschnitt 9)
+3. Starte mit Week 1 des 12-Wochen-Plans
+4. Übe JEDEN TAG auch nur 30 Minuten
+
+Die OSEP ist machbar. Du musst nur systematisch vorgehen und praktisch üben. Viel Erfolg! 🎯
